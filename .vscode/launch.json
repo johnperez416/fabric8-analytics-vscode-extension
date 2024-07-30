@@ -11,14 +11,14 @@
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",
 			"args": [
-				"--extensionDevelopmentPath=${workspaceFolder}"
+				"--extensionDevelopmentPath=${workspaceFolder}",
+				"${workspaceFolder}/test-workspace"
 			],
-			"stopOnEntry": false,
 			"sourceMaps": true,
 			"outFiles": [
 				"${workspaceFolder}/dist/*.js"
 			],
-			"preLaunchTask": "npm: webpack-dev"
+			"preLaunchTask": "npm: webpack-dev",
 		},
 		{
 			"name": "Launch Tests",
@@ -26,15 +26,11 @@
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",
 			"args": [
-				"${workspaceFolder}/test/resources/sampleNodeApp/",
+				"${workspaceFolder}/test/resources/",
 				"--extensionDevelopmentPath=${workspaceRoot}",
 				"--extensionTestsPath=${workspaceRoot}/out/test"
 			],
-			"stopOnEntry": false,
 			"sourceMaps": true,
-			"outFiles": [
-				"${workspaceFolder}/out/test/**/*.js"
-			],
 			"preLaunchTask": "npm: test-compile"
 		},
 		{

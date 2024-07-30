@@ -2,18 +2,17 @@
 
 'use strict';
 
+import * as webpack from 'webpack';
+
 const path = require('path');
 const glob = require('glob');
 
 module.exports = (env, argv) => {
+
   let entry = {
     'extension': './src/extension.ts',
-    'server': './node_modules/fabric8-analytics-lsp-server/dist/server.js',
+    'server': './node_modules/@fabric8-analytics/fabric8-analytics-lsp-server/dist/server.js',
   };
-  // debug
-  if (argv.mode !== 'production') {
-    /* entry['test/all.test'] = glob.sync('./test/*.test.ts'); */
-  }
   /**@type {import('webpack').Configuration}*/
   const config = {
     target: 'node', // vscode extensions run in a Node.js-context 📖 -> https://webpack.js.org/configuration/node/
@@ -26,7 +25,7 @@ module.exports = (env, argv) => {
       libraryTarget: 'commonjs2',
       devtoolModuleFilenameTemplate: '../[resource-path]'
     },
-    devtool: 'source-map',
+    devtool: 'inline-source-map',
     externals: {
       vscode: 'commonjs vscode' // the vscode-module is created on-the-fly and must be excluded. Add other modules that cannot be webpack'ed, 📖 -> https://webpack.js.org/configuration/externals/
     },
@@ -42,17 +41,17 @@ module.exports = (env, argv) => {
       },
       {
         test: /\.ts$/,
-        exclude: /node_modules/,
         use: [{
           loader: 'ts-loader',
-          options: {
-            compilerOptions: {
-              "module": "es6" // override `tsconfig.json` so that TypeScript emits native JavaScript modules.
-            }
-          }
         }]
       }]
     },
+    ignoreWarnings: [/Failed to parse source map/],
+    plugins: [
+      new webpack.ProvidePlugin({
+        fetch: ['node-fetch', 'default'],
+      }),
+    ]
   };
   return config;
 };
